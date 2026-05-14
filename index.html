@@ -3,142 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momo Timer - 말랑말랑 집중 시간 🍓</title>
+    <title>MomoTimer - 몽글몽글 집중 타이머</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { 
-                        sans: ['Pretendard', 'sans-serif'], 
-                        nunito: ['"Nunito"', 'sans-serif'] 
-                    },
-                    colors: { 
-                        timer: { main: '#F899B3', deep: '#c47a91', light: '#fdecf1', text: '#9e6678', bg: '#fff5f8' }
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                        quicksand: ['"Quicksand"', 'sans-serif'],
+                        nunito: ['"Nunito"', 'sans-serif']
                     }
                 }
             }
         }
     </script>
+
     <style>
-        body { font-family: 'Pretendard', sans-serif; color: #6B7280; overflow-x: hidden; background-color: #fdf2f8; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        body { font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+
+        .blob { position:absolute; border-radius:50%; filter:blur(90px); opacity:.18; pointer-events:none; }
+
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(-1.5deg)} 50%{transform:translateY(-14px) rotate(-1.5deg)} }
         .animate-float { animation: float 6s ease-in-out infinite; }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
-        .btn-shine::after { content: ''; position: absolute; top: 0; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 3s infinite; }
-        .soft-shadow { box-shadow: 0 20px 40px rgba(248, 153, 179, 0.2), 0 0 0 1px rgba(0,0,0,0.02); }
-        
-        /* 핵심 수정: 단어가 중간에 잘리지 않도록 설정 */
-        .keep-all { word-break: keep-all; overflow-wrap: break-word; }
-        
-        ::-webkit-scrollbar { display: none; }
-        
-        .timer-bg {
-            background: linear-gradient(168deg, rgba(248,153,179,0.04) 0%, rgba(248,153,179,0.12) 55%, rgba(248,153,179,0.22) 100%);
+
+        @keyframes shine { 0%{left:-100%} 100%{left:220%} }
+        .btn-shine::after { content:''; position:absolute; top:0; width:50%; height:100%; background:linear-gradient(to right,rgba(255,255,255,0),rgba(255,255,255,.4),rgba(255,255,255,0)); transform:skewX(-25deg); animation:shine 3s infinite; }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+        .fu { animation:fadeUp .65s ease forwards; opacity:0; }
+        .d1{animation-delay:.05s} .d2{animation-delay:.18s} .d3{animation-delay:.32s} .d4{animation-delay:.46s} .d5{animation-delay:.60s}
+
+        ::-webkit-scrollbar { display:none }
+
+        /* ── widget ── */
+        .widget {
+            width:250px;
+            background: linear-gradient(168deg,
+                color-mix(in srgb, #F899B3 4%, white) 0%,
+                color-mix(in srgb, #F899B3 12%, white) 55%,
+                color-mix(in srgb, #F899B3 22%, white) 100%);
+            border-radius:22px; overflow:hidden;
+            box-shadow:0 32px 64px rgba(248,153,179,.35),0 0 0 1px rgba(255,255,255,.9);
+            position:relative; font-family:'Nunito',sans-serif;
         }
-        .timer-pattern {
+        .widget::before {
+            content:'';position:absolute;inset:0;pointer-events:none;border-radius:22px;
             background-image:
-                repeating-linear-gradient(45deg, rgba(248,153,179,0.08) 0, rgba(248,153,179,0.08) 1px, transparent 1px, transparent 16px),
-                repeating-linear-gradient(-45deg, rgba(248,153,179,0.08) 0, rgba(248,153,179,0.08) 1px, transparent 1px, transparent 16px);
+                repeating-linear-gradient(45deg, color-mix(in srgb,#F899B3 8%,transparent) 0,color-mix(in srgb,#F899B3 8%,transparent) 1px,transparent 1px,transparent 16px),
+                repeating-linear-gradient(-45deg, color-mix(in srgb,#F899B3 8%,transparent) 0,color-mix(in srgb,#F899B3 8%,transparent) 1px,transparent 1px,transparent 16px);
         }
+        .w-header { padding:14px 18px 6px; text-align:center; position:relative; }
+        .w-title { font-size:9px; font-weight:800; letter-spacing:3.5px; text-transform:uppercase; color:color-mix(in srgb,#F899B3 65%,white); }
+        .w-line { margin-top:6px; display:flex; align-items:center; gap:3px; }
+        .wl-dot { width:3px; height:3px; border-radius:50%; background:color-mix(in srgb,#F899B3 50%,white); flex-shrink:0; }
+        .wl-dash { flex:1; height:1px; background:linear-gradient(90deg,transparent,color-mix(in srgb,#F899B3 50%,white),transparent); }
+        .w-ctrl { position:absolute; top:11px; right:13px; display:flex; gap:5px; }
+        .wc-btn { width:13px; height:13px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:7px; color:#fff; font-weight:900; }
+        .wc-min { background:#ffce6b; }
+        .wc-close { background:#F899B3; }
+
+        .w-body { padding:5px 15px 10px; display:flex; flex-direction:column; gap:8px; position:relative; z-index:2; }
+
+        .w-photo {
+            width:100%; height:80px; border-radius:14px;
+            border:1.5px dashed color-mix(in srgb,#F899B3 40%,white);
+            background:rgba(255,255,255,.55);
+            display:flex; align-items:center; justify-content:center;
+            overflow:hidden; position:relative;
+        }
+        .wp-cam { position:absolute; top:6px; right:6px; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,.95); border:1px solid color-mix(in srgb,#F899B3 30%,white); display:flex; align-items:center; justify-content:center; font-size:9px; }
+
+        .w-timer { background:rgba(255,255,255,.6); border:1.5px solid color-mix(in srgb,#F899B3 30%,transparent); border-radius:16px; padding:10px 10px 8px; text-align:center; position:relative; overflow:hidden; }
+        .w-timer::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(.8); width:80px; height:70px; background:color-mix(in srgb,#F899B3 8%,transparent); clip-path:path('M40 70 C16 52 0 38 0 24 A18 18 0 0 1 36 17 A18 18 0 0 1 80 24 C80 38 64 52 40 70Z'); pointer-events:none; }
+        .wt-lbl { font-size:7px; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:color-mix(in srgb,#F899B3 65%,white); margin-bottom:1px; }
+        .wt-num { font-size:36px; font-weight:900; color:#F899B3; letter-spacing:1px; line-height:1; text-shadow:0 2px 0 rgba(255,255,255,.9); font-variant-numeric:tabular-nums; }
+        .wt-prog { margin-top:6px; height:3px; background:color-mix(in srgb,#F899B3 14%,transparent); border-radius:10px; overflow:hidden; }
+        .wt-bar { height:100%; background:linear-gradient(90deg,color-mix(in srgb,#F899B3 50%,white),#F899B3); border-radius:10px; width:62%; }
+
+        .w-settings { display:flex; gap:7px; }
+        .w-inp, .w-sel { background:rgba(255,255,255,.6); border:1.5px solid color-mix(in srgb,#F899B3 30%,transparent); border-radius:11px; padding:7px 6px; display:flex; flex-direction:column; align-items:center; gap:2px; }
+        .w-inp { flex:1; } .w-sel { flex:1.5; }
+        .ws-lbl { font-size:6.5px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:color-mix(in srgb,#F899B3 65%,white); }
+        .ws-val { font-size:11px; font-weight:800; color:#9e6678; }
+
+        .w-alarm { background:rgba(255,255,255,.6); border:1.5px solid color-mix(in srgb,#F899B3 30%,transparent); border-radius:11px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; }
+        .wa-left { display:flex; align-items:center; gap:5px; font-size:9px; font-weight:800; color:#9e6678; }
+        .wa-toggle { width:24px; height:13px; background:color-mix(in srgb,#F899B3 20%,white); border-radius:8px; position:relative; flex-shrink:0; }
+        .wa-toggle::after { content:''; position:absolute; top:1.5px; left:1.5px; width:10px; height:10px; background:white; border-radius:50%; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+
+        .w-status { font-size:8.5px; font-weight:800; color:color-mix(in srgb,#F899B3 55%,white); text-align:center; height:10px; }
+
+        .w-themes { display:flex; justify-content:center; gap:8px; padding:1px 0; }
+        .wth-dot { width:18px; height:18px; border-radius:50%; border:2px solid white; box-shadow:0 2px 4px rgba(0,0,0,.1); }
+        .wth-dot.active { box-shadow:0 0 0 2px #F899B3,0 2px 4px rgba(0,0,0,.1); transform:scale(1.07); }
+
+        .w-btns { display:flex; gap:6px; }
+        .wb-main { flex:2; border:none; border-radius:11px; padding:10px 0; font-size:10px; font-weight:900; letter-spacing:.8px; font-family:'Nunito',sans-serif; background:linear-gradient(160deg,color-mix(in srgb,#F899B3 75%,white),#F899B3); color:#fff; box-shadow:0 4px 14px color-mix(in srgb,#F899B3 40%,transparent),inset 0 1px 0 rgba(255,255,255,.3); }
+        .wb-sub { flex:1; border:1.5px solid color-mix(in srgb,#F899B3 35%,transparent); border-radius:11px; padding:10px 0; font-size:9px; font-weight:800; font-family:'Nunito',sans-serif; background:rgba(255,255,255,.6); color:#9e6678; }
+
+        .w-lace { display:flex; justify-content:center; align-items:center; padding:4px 0 10px; position:relative; z-index:2; }
+        .lc { width:6px; height:6px; border-radius:50%; border:1.5px solid color-mix(in srgb,#F899B3 45%,white); background:transparent; margin-left:-1px; }
+        .lc:first-child { margin-left:0; }
+        .lc.f { background:color-mix(in srgb,#F899B3 45%,white); }
     </style>
 </head>
-<body class="bg-gradient-to-br from-[#fff5f8] via-white to-[#fdecf1] min-h-screen selection:bg-timer-main selection:text-white">
 
-    <nav class="w-full px-6 py-6 sm:px-8 sm:py-8 flex justify-center items-center max-w-6xl mx-auto">
-        <div class="font-nunito font-black text-timer-main text-2xl sm:text-3xl tracking-widest drop-shadow-sm uppercase">Momo Timer.</div>
+<body class="bg-gradient-to-br from-[#FFF0F5] via-white to-[#FFE4E1] min-h-screen selection:bg-[#F899B3] selection:text-white">
+
+    <div class="blob w-[480px] h-[480px] bg-[#F899B3] absolute top-[-120px] left-[-80px]"></div>
+    <div class="blob w-[360px] h-[360px] bg-[#c47a91] absolute bottom-[-60px] right-[-60px]"></div>
+
+    <nav class="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 py-7 flex justify-between items-center">
+        <span class="font-quicksand font-bold text-[#F899B3] text-2xl sm:text-3xl tracking-tighter">MomoTimer.</span>
+        <a href="https://github.com/DearMySn1p3r/DearMySn1p3r_28" target="_blank"
+           class="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#F899B3] transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+            GitHub
+        </a>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 sm:px-8 pt-4 pb-20 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-8 min-h-[calc(100vh-100px)]">
-        
-        <div class="flex-1 text-center lg:text-left z-10 w-full lg:max-w-xl">
-            <div class="inline-block bg-white px-4 py-1.5 rounded-full shadow-sm border border-timer-light mb-6">
-                <span class="text-xs font-black text-timer-main tracking-wide">✨ V1.0.0 Release - 나만의 말랑한 Focus Timer 🐰</span>
+    <main class="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-0 pb-20 flex flex-col lg:flex-row items-center justify-between gap-14 lg:gap-8 min-h-[calc(100vh-96px)]">
+
+        <!-- copy -->
+        <div class="flex-1 text-center lg:text-left w-full lg:max-w-[500px]">
+
+            <div class="fu d1 inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-[#FFE4E1] mb-7">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#F899B3] animate-pulse"></span>
+                <span class="text-xs font-black text-[#F899B3] tracking-wide">✨ v1.0.0 Pre-release 출시!</span>
             </div>
-            
-            <h1 class="text-[2.3rem] sm:text-5xl lg:text-6xl font-black text-gray-800 leading-[1.25] mb-6 keep-all">
-                당신의 소중한 시간을 <br class="hidden sm:block">
-                가장 <span class="text-transparent bg-clip-text bg-gradient-to-r from-timer-main to-timer-deep font-nunito tracking-tighter">말랑하게 지켜줄게요</span> 💖
+
+            <h1 class="fu d2 text-[2.5rem] sm:text-5xl lg:text-[3.5rem] font-black text-gray-800 leading-[1.2] mb-5 break-keep">
+                집중할 땐<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F899B3] to-[#c47a91] font-quicksand tracking-tighter">MomoTimer.</span>
             </h1>
-            
-            <p class="text-base sm:text-lg text-gray-500 mb-10 leading-relaxed mx-auto lg:mx-0 keep-all">
-                최애 사진을 쏙! 넣고, 집중할 App을 가볍게 골라보세요.<br>
-                포근한 핑크 테마와 함께라면 어느새 스르륵 몰입 완료!<br>
-                딱딱한 작업 시간도 Momo Timer와 함께라면 말랑말랑해질 거예요 🍓✨
+
+            <p class="fu d3 text-base sm:text-lg text-gray-500 mb-10 leading-relaxed mx-auto lg:mx-0 break-keep">
+                귀엽고 말랑한 플로팅 타이머 위젯 하나로<br>
+                내 집중 시간을 알뜰살뜰 관리해요 🍓<br>
+                좋아하는 사진도 올려두고, 색도 골라서<br>
+                내 화면 위에 딱 맞게 꾸밀 수 있어요!
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full">
-                <a href="https://github.com/DearMySn1p3r/DearMySn1p3r_28/releases/download/v1.0.0/MomoTimer.exe" class="whitespace-nowrap btn-shine relative overflow-hidden bg-timer-main text-white px-8 py-4 rounded-[20px] font-bold text-base shadow-lg shadow-timer-main/40 hover:bg-timer-deep hover:-translate-y-1 transition-all flex items-center justify-center gap-2.5 w-full sm:w-auto">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Momo Timer 다운로드 🎀
+            <div class="fu d4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                <a href="https://github.com/DearMySn1p3r/DearMySn1p3r_28/releases/download/v1.0.0/MomoTimer.exe"
+                   class="btn-shine relative overflow-hidden bg-[#F899B3] text-white px-8 py-4 rounded-[20px] font-bold text-base shadow-lg shadow-[#F899B3]/40 hover:bg-[#c47a91] hover:-translate-y-1 transition-all flex items-center justify-center gap-2.5 whitespace-nowrap">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    PC 버전 다운로드 (.exe)
                 </a>
             </div>
-            
-            <div class="mt-8 space-y-2">
-                <p class="text-[13px] text-gray-400 font-medium keep-all">
-                    💻 <b>설치 방법:</b> 말랑말랑 귀여운 <span class="text-timer-main font-bold">MomoTimer.exe</span>를 다운받아 바로 실행해 보세요! ✨
-                </p>
-                <p class="text-[13px] text-gray-400 font-medium">
-                    📦 <b>정보:</b> 약 189 MB | Windows 전용 🪟
-                </p>
+
+            <div class="fu d4 space-y-2 mb-9">
+                <p class="text-[13px] text-gray-400 font-medium">💻 <b>Windows 10 / 11</b> 권장 &nbsp;·&nbsp; 189 MB</p>
+                <p class="text-[13px] text-gray-400 font-medium break-keep">⚠️ 실행 시 보안 경고가 뜨면 <span class="text-[#F899B3] font-bold">'추가 정보 → 실행'</span>을 눌러주세요 🙏</p>
+            </div>
+
+            <div class="fu d5 flex flex-wrap gap-2 justify-center lg:justify-start">
+                <span class="px-3 py-1.5 bg-white border border-[#FFE4E1] rounded-full text-[12px] font-bold text-[#c47a91] shadow-sm">📸 사진 커스텀</span>
+                <span class="px-3 py-1.5 bg-white border border-[#FFE4E1] rounded-full text-[12px] font-bold text-[#c47a91] shadow-sm">🎯 집중 앱 추적</span>
+                <span class="px-3 py-1.5 bg-white border border-[#FFE4E1] rounded-full text-[12px] font-bold text-[#c47a91] shadow-sm">🔔 정시 알람</span>
+                <span class="px-3 py-1.5 bg-white border border-[#FFE4E1] rounded-full text-[12px] font-bold text-[#c47a91] shadow-sm">🎨 6가지 테마</span>
+                <span class="px-3 py-1.5 bg-white border border-[#FFE4E1] rounded-full text-[12px] font-bold text-[#c47a91] shadow-sm">🖥️ 플로팅 위젯</span>
             </div>
         </div>
 
-        <div class="w-full flex justify-center lg:justify-end mt-4 lg:mt-0 relative h-[500px] sm:h-[600px] lg:h-auto overflow-hidden lg:overflow-visible animate-float pointer-events-none select-none">
-            <div class="w-[320px] h-[480px] bg-white rounded-none soft-shadow flex flex-col relative top-0 lg:relative origin-top transform scale-[0.8] sm:scale-[0.9] lg:scale-100 transition-transform duration-500 overflow-hidden timer-bg border-[4px] border-white/80 rounded-[12px]">
-                <div class="absolute inset-0 timer-pattern z-0"></div>
+        <!-- widget mockup -->
+        <div class="animate-float pointer-events-none select-none shrink-0">
+            <div class="widget">
 
-                <div class="relative z-10 pt-4 px-5 text-center">
-                    <div class="text-[11px] font-nunito font-black tracking-[3.5px] text-timer-deep uppercase">MOMO TIMER</div>
-                    <div class="mt-2 flex items-center justify-center gap-1">
-                        <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-timer-main/50 to-transparent"></div>
-                        <div class="w-[3px] h-[3px] rounded-full bg-timer-main/50"></div>
-                        <div class="w-[3px] h-[3px] rounded-full bg-timer-main/50"></div>
-                        <div class="w-[3px] h-[3px] rounded-full bg-timer-main/50"></div>
-                        <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-timer-main/50 to-transparent"></div>
+                <div class="w-header">
+                    <div class="w-title">MOMO TIMER</div>
+                    <div class="w-line">
+                        <div class="wl-dash"></div>
+                        <div class="wl-dot"></div><div class="wl-dot"></div><div class="wl-dot"></div>
+                        <div class="wl-dash"></div>
+                    </div>
+                    <div class="w-ctrl">
+                        <div class="wc-btn wc-min">−</div>
+                        <div class="wc-btn wc-close">✕</div>
                     </div>
                 </div>
 
-                <div class="flex-1 relative z-10 flex flex-col px-5 py-3 gap-3">
-                    <div class="w-full h-[90px] border-[1.5px] border-dashed border-timer-main/40 bg-white/60 rounded-[18px] flex flex-col items-center justify-center">
-                        <span class="text-[10px] font-black text-timer-main tracking-wide">＋ 사진 추가 ✨</span>
+                <div class="w-body">
+
+                    <!-- photo zone with sample image -->
+                    <div class="w-photo">
+                        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#ffd6e7 0%,#ffb3c6 50%,#ff99b5 100%);opacity:.75;border-radius:14px;"></div>
+                        <div style="position:absolute;font-size:30px;filter:drop-shadow(0 2px 6px rgba(200,80,120,.25))">🍓</div>
+                        <div class="wp-cam">📷</div>
                     </div>
 
-                    <div class="bg-white/60 border-[1.5px] border-timer-main/30 rounded-[20px] p-3 text-center">
-                        <div class="text-[8px] font-nunito font-black tracking-[2.5px] text-timer-deep/70 uppercase mb-1">focus time</div>
-                        <div class="text-[44px] font-nunito font-black text-timer-main leading-none">00:00:00</div>
-                        <div class="mt-2 h-1 bg-timer-main/10 rounded-full overflow-hidden">
-                            <div class="w-0 h-full bg-timer-main"></div>
+                    <!-- timer -->
+                    <div class="w-timer">
+                        <div class="wt-lbl">total time</div>
+                        <div class="wt-num">00:24:37</div>
+                        <div class="wt-prog"><div class="wt-bar"></div></div>
+                    </div>
+
+                    <!-- settings -->
+                    <div class="w-settings">
+                        <div class="w-inp">
+                            <span class="ws-lbl">알람 (분)</span>
+                            <span class="ws-val">25</span>
+                        </div>
+                        <div class="w-sel">
+                            <span class="ws-lbl">집중 앱</span>
+                            <span class="ws-val">Figma</span>
                         </div>
                     </div>
 
-                    <div class="flex gap-2">
-                        <div class="flex-1 bg-white/60 border-[1.5px] border-timer-main/30 rounded-[14px] p-2 flex flex-col items-center">
-                            <span class="text-[7.5px] font-black text-timer-deep/70 uppercase">ALARM (MIN)</span>
-                            <span class="text-[12px] font-nunito font-black text-timer-text mt-0.5">25</span>
-                        </div>
-                        <div class="flex-[1.5] bg-white/60 border-[1.5px] border-timer-main/30 rounded-[14px] p-2 flex flex-col items-center">
-                            <span class="text-[7.5px] font-black text-timer-deep/70 uppercase">FOCUS APP</span>
-                            <span class="text-[12px] font-nunito font-black text-timer-text mt-0.5">Chrome</span>
+                    <!-- alarm toggle -->
+                    <div class="w-alarm">
+                        <div class="wa-left"><span style="font-size:11px">🔔</span><span>정시 알람</span></div>
+                        <div style="display:flex;align-items:center;gap:7px;">
+                            <span style="font-size:7px;font-weight:900;color:color-mix(in srgb,#F899B3 40%,white);letter-spacing:.5px;font-family:Nunito,sans-serif;">OFF</span>
+                            <div class="wa-toggle"></div>
                         </div>
                     </div>
 
-                    <div class="flex gap-2 mt-auto pb-4">
-                        <div class="flex-[2] bg-timer-main text-white font-nunito font-black text-[11px] rounded-[14px] py-3 text-center shadow-md">START</div>
-                        <div class="flex-1 bg-white/60 border border-timer-main/30 text-timer-text font-nunito font-black text-[10px] rounded-[14px] py-3 text-center">RESET</div>
+                    <!-- status -->
+                    <div class="w-status">♡ figma 집중 중</div>
+
+                    <!-- themes -->
+                    <div class="w-themes">
+                        <div class="wth-dot active" style="background:#F899B3"></div>
+                        <div class="wth-dot" style="background:#E97891"></div>
+                        <div class="wth-dot" style="background:#B9A4DD"></div>
+                        <div class="wth-dot" style="background:#7FCFAE"></div>
+                        <div class="wth-dot" style="background:#FFA785"></div>
+                        <div class="wth-dot" style="background:#86BFE0"></div>
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="w-btns">
+                        <button class="wb-main">START</button>
+                        <button class="wb-sub">RESET</button>
                     </div>
                 </div>
+
+                <!-- lace -->
+                <div class="w-lace" id="lace"></div>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-6 sm:py-10 text-xs font-bold text-gray-400">
-        <p>© 2026 Momo Timer. All rights reserved.</p>
-        <p class="mt-2 font-nunito">Made with 💕 by DearMySn1p3r</p>
+    <footer class="relative z-10 text-center py-7 text-xs font-bold text-gray-400">
+        <p>© 2026 MomoTimer. All rights reserved.</p>
+        <p class="mt-1.5 font-quicksand">Made with 💕 by DearMySn1p3r</p>
     </footer>
 
+    <script>
+        const lace = document.getElementById('lace');
+        [0,0,1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,1,0,0].forEach((f, i) => {
+            const d = document.createElement('div');
+            d.className = 'lc' + (f ? ' f' : '');
+            if (i === 0) d.style.marginLeft = '0';
+            lace.appendChild(d);
+        });
+    </script>
 </body>
 </html>
