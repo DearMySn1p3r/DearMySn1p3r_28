@@ -18,7 +18,7 @@
                     },
                     colors: { 
                         momo: { 
-                            main: '#F899B3',   /* 앱의 테마 컬러 */
+                            main: '#F899B3',
                             dark: '#c47a91',
                             text: '#9e6678',
                             bg: '#FFF5F8',
@@ -31,103 +31,62 @@
     </script>
     <style>
         body { font-family: 'Pretendard', sans-serif; color: #9e6678; overflow-x: hidden; background-color: #FFF5F8; }
-        
         @keyframes float { 
             0% { transform: translateY(0px) rotate(0deg); } 
             50% { transform: translateY(-15px) rotate(1.5deg); } 
             100% { transform: translateY(0px) rotate(0deg); } 
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
-        
         .btn-shine::after { 
             content: ''; position: absolute; top: 0; width: 50%; height: 100%; 
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); 
             transform: skewX(-25deg); animation: shine 3s infinite; 
         }
         @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
-        
         .glass-widget {
             box-shadow: 0 25px 50px -12px rgba(248, 153, 179, 0.25);
-            backdrop-filter: blur(12px);
-            border: 2px solid white;
-        }
-
-        .bg-pattern {
-            background-image: radial-gradient(#F899B3 0.8px, transparent 0.8px);
-            background-size: 24px 24px;
-            opacity: 0.2;
+            backdrop-filter: blur(12px); border: 2px solid white;
         }
     </style>
 </head>
 <body class="relative min-h-screen">
 
-    <div class="absolute inset-0 bg-pattern -z-10"></div>
-
     <nav class="w-full px-6 py-10 flex justify-center items-center">
-        <div class="font-nunito font-black text-momo-main text-2xl tracking-widest drop-shadow-sm">
-            🎀 MOMO TIMER
-        </div>
+        <div class="font-nunito font-black text-momo-main text-2xl tracking-widest">🎀 MOMO TIMER</div>
     </nav>
 
     <main class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12 pt-10 pb-24">
-        
-        <div class="flex-1 text-center lg:text-left z-10">
-            <div class="inline-block bg-white/80 px-4 py-1.5 rounded-full shadow-sm mb-6 border border-momo-lace">
-                <span class="text-xs font-black text-momo-main tracking-tight">✨ 나만의 최애 사진과 함께하는 집중 시간</span>
-            </div>
-            
+        <div class="flex-1 text-center lg:text-left">
             <h1 class="text-4xl sm:text-6xl font-black text-gray-800 leading-tight mb-8 break-keep">
-                내 책상 위의<br>
-                <span class="text-momo-main font-nunito">작은 요정, Momo Timer</span>
+                내 책상 위의<br><span class="text-momo-main font-nunito">작은 요정, Momo Timer</span>
             </h1>
             
-            <p class="text-lg text-momo-text mb-12 leading-relaxed opacity-90">
-                작업 시간이 지루하신가요? 바탕화면 위에 예쁘게 띄워두는<br>
-                반투명 프레임리스 타이머로 나만의 공간을 꾸며보세요.
+            <p class="text-lg text-momo-text mb-12 opacity-90">
+                바탕화면 위에 예쁘게 띄워두는<br>프레임리스 타이머로 나만의 공간을 꾸며보세요.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <a href="https://github.com/DearMySn1p3r/MomoTimer/releases/download/v1.0.0/MomoTimer.exe" 
-                   class="btn-shine relative overflow-hidden bg-momo-main text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-momo-main/30 hover:bg-momo-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                   download
+                   class="btn-shine relative overflow-hidden bg-momo-main text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg hover:bg-momo-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801z"/></svg>
-                    Windows 다운로드
+                    Windows v1.0.0 다운로드
                 </a>
             </div>
+            
+            <p class="mt-4 text-xs text-momo-text opacity-50">※ 다운로드 실패 시 브라우저 설정에서 '유지'를 클릭하세요.</p>
         </div>
 
         <div class="relative animate-float">
-            <div class="w-[310px] h-[550px] bg-white/90 rounded-[32px] glass-widget p-6 flex flex-col gap-5 border-2 border-white">
-                <div class="text-center">
-                    <div class="text-[10px] font-black text-momo-main tracking-[4px] opacity-60">MOMO TIMER</div>
+            <div class="w-[280px] h-[500px] bg-white/90 rounded-[32px] glass-widget p-6 flex flex-col gap-5 border-2 border-white">
+                <div class="text-center text-[10px] font-black text-momo-main tracking-[4px]">MOMO TIMER</div>
+                <div class="w-full h-24 rounded-2xl border-2 border-dashed border-momo-main/30 bg-momo-bg flex items-center justify-center text-2xl">📷</div>
+                <div class="bg-white rounded-2xl p-6 text-center shadow-sm">
+                    <div class="text-4xl font-nunito font-black text-momo-main">25:00</div>
+                    <div class="w-full h-1 bg-momo-bg rounded-full mt-4 overflow-hidden"><div class="w-1/3 h-full bg-momo-main"></div></div>
                 </div>
-                
-                <div class="w-full h-28 rounded-2xl border-2 border-dashed border-momo-main/30 bg-momo-bg flex items-center justify-center">
-                    <span class="text-2xl">📷</span>
-                </div>
-
-                <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-momo-lace">
-                    <div class="text-[42px] font-nunito font-black text-momo-main">25:00</div>
-                    <div class="w-full h-1.5 bg-momo-bg rounded-full mt-4 overflow-hidden">
-                        <div class="w-1/3 h-full bg-momo-main"></div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-white/50 p-3 rounded-xl border border-white text-center">
-                        <div class="text-[8px] font-bold text-momo-dark">알람(분)</div>
-                        <div class="font-black text-momo-text">25</div>
-                    </div>
-                    <div class="bg-white/50 p-3 rounded-xl border border-white text-center">
-                        <div class="text-[8px] font-bold text-momo-dark">집중 앱</div>
-                        <div class="font-black text-momo-text text-[10px]">Chrome 🎨</div>
-                    </div>
-                </div>
-
-                <button class="w-full bg-momo-main text-white py-4 rounded-xl font-black text-sm shadow-md">START</button>
+                <button class="w-full bg-momo-main text-white py-4 rounded-xl font-black text-sm">START</button>
             </div>
-            
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-momo-main/20 blur-3xl -z-10"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-200/50 blur-3xl -z-10"></div>
         </div>
     </main>
 
