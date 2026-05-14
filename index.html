@@ -32,174 +32,107 @@
     <style>
         body { font-family: 'Pretendard', sans-serif; color: #9e6678; overflow-x: hidden; background-color: #FFF5F8; }
         
-        /* 부드럽게 둥둥 떠다니는 애니메이션 */
         @keyframes float { 
             0% { transform: translateY(0px) rotate(0deg); } 
-            50% { transform: translateY(-12px) rotate(1.5deg); } 
+            50% { transform: translateY(-15px) rotate(1.5deg); } 
             100% { transform: translateY(0px) rotate(0deg); } 
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
         
-        /* 버튼 반짝임 효과 */
-        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
         .btn-shine::after { 
             content: ''; position: absolute; top: 0; width: 50%; height: 100%; 
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%); 
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); 
             transform: skewX(-25deg); animation: shine 3s infinite; 
         }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
         
-        /* 타이머 위젯 그림자 & 유리 질감 */
         .glass-widget {
-            box-shadow: 0 30px 60px rgba(248, 153, 179, 0.2), inset 0 0 0 2px rgba(255,255,255,0.7);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(248, 153, 179, 0.25);
+            backdrop-filter: blur(12px);
+            border: 2px solid white;
         }
 
-        /* 패턴 배경 */
         .bg-pattern {
-            background-image: radial-gradient(#F899B3 1px, transparent 1px), radial-gradient(#F899B3 1px, #FFF5F8 1px);
-            background-size: 32px 32px;
-            background-position: 0 0, 16px 16px;
-            opacity: 0.25;
+            background-image: radial-gradient(#F899B3 0.8px, transparent 0.8px);
+            background-size: 24px 24px;
+            opacity: 0.2;
         }
-
-        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="relative min-h-screen selection:bg-momo-main selection:text-white">
+<body class="relative min-h-screen">
 
     <div class="absolute inset-0 bg-pattern -z-10"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-white/90 via-transparent to-[#FFF5F8]/80 -z-10"></div>
 
-    <nav class="w-full px-6 py-8 flex justify-center items-center max-w-6xl mx-auto">
-        <div class="font-nunito font-black text-momo-main text-2xl tracking-widest drop-shadow-sm flex items-center gap-2">
+    <nav class="w-full px-6 py-10 flex justify-center items-center">
+        <div class="font-nunito font-black text-momo-main text-2xl tracking-widest drop-shadow-sm">
             🎀 MOMO TIMER
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 sm:px-8 pt-4 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16 min-h-[calc(100vh-120px)]">
+    <main class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12 pt-10 pb-24">
         
-        <div class="flex-1 text-center lg:text-left z-10 w-full lg:max-w-xl">
-            <div class="inline-block bg-white px-5 py-2 rounded-full shadow-sm border border-momo-main/20 mb-6 transition-transform hover:scale-105">
-                <span class="text-[13px] font-black text-momo-main tracking-wide">✨ 나만의 최애 사진과 함께 집중해요!</span>
+        <div class="flex-1 text-center lg:text-left z-10">
+            <div class="inline-block bg-white/80 px-4 py-1.5 rounded-full shadow-sm mb-6 border border-momo-lace">
+                <span class="text-xs font-black text-momo-main tracking-tight">✨ 나만의 최애 사진과 함께하는 집중 시간</span>
             </div>
             
-            <h1 class="text-[2.75rem] sm:text-[3.5rem] font-black text-gray-800 leading-[1.2] mb-6 break-keep">
+            <h1 class="text-4xl sm:text-6xl font-black text-gray-800 leading-tight mb-8 break-keep">
                 내 책상 위의<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-momo-main to-momo-dark font-nunito tracking-tight drop-shadow-sm">작은 요정, Momo Timer</span>
+                <span class="text-momo-main font-nunito">작은 요정, Momo Timer</span>
             </h1>
             
-            <p class="text-base sm:text-lg text-momo-text mb-10 leading-relaxed mx-auto lg:mx-0 break-keep font-medium opacity-90">
-                작업 시간이 지루하신가요? 바탕화면 위에 예쁘게 띄워두는<br class="hidden lg:block">
-                반투명 프레임리스 타이머로 나만의 공간을 꾸며보세요.<br class="hidden lg:block">
-                사용 중인 앱을 인식하고, 사랑스러운 알람이 정시를 알려줍니다.
+            <p class="text-lg text-momo-text mb-12 leading-relaxed opacity-90">
+                작업 시간이 지루하신가요? 바탕화면 위에 예쁘게 띄워두는<br>
+                반투명 프레임리스 타이머로 나만의 공간을 꾸며보세요.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full">
-                <a href="MomoTimer.exe" download="MomoTimer.exe" class="whitespace-nowrap btn-shine relative overflow-hidden bg-momo-main text-white px-8 py-4 rounded-full font-bold text-[17px] shadow-xl shadow-momo-main/30 hover:bg-momo-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
-                    <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801z"/></svg>
-                    Windows 다운로드 (.exe)
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a href="https://github.com/사용자/저장소/releases/download/v1.0.0/MomoTimer.exe" 
+                   class="btn-shine relative overflow-hidden bg-momo-main text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-momo-main/30 hover:bg-momo-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801z"/></svg>
+                    Windows 다운로드
                 </a>
-            </div>
-            
-            <div class="mt-10 flex flex-col gap-3">
-                <div class="flex items-center justify-center lg:justify-start gap-3 text-[14px] text-momo-text font-bold bg-white/40 w-fit lg:mx-0 mx-auto px-4 py-1.5 rounded-full">
-                    <span class="w-2.5 h-2.5 rounded-full bg-momo-main shadow-sm"></span>
-                    프레임리스 투명 창 디자인
-                </div>
-                <div class="flex items-center justify-center lg:justify-start gap-3 text-[14px] text-momo-text font-bold bg-white/40 w-fit lg:mx-0 mx-auto px-4 py-1.5 rounded-full">
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#B9A4DD] shadow-sm"></span>
-                    원하는 사진으로 폴라로이드 꾸미기
-                </div>
-                <div class="flex items-center justify-center lg:justify-start gap-3 text-[14px] text-momo-text font-bold bg-white/40 w-fit lg:mx-0 mx-auto px-4 py-1.5 rounded-full">
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#7FCFAE] shadow-sm"></span>
-                    집중 중인 프로그램(앱) 자동 인식
-                </div>
             </div>
         </div>
 
-        <div class="w-full lg:w-[400px] flex justify-center mt-12 lg:mt-0 relative animate-float pointer-events-none select-none z-20">
-            
-            <div class="w-[310px] bg-gradient-to-br from-white/95 to-[#FFF0F5]/95 rounded-[28px] glass-widget flex flex-col overflow-hidden relative border-[1.5px] border-white">
+        <div class="relative animate-float">
+            <div class="w-[310px] h-[550px] bg-white/90 rounded-[32px] glass-widget p-6 flex flex-col gap-5 border-2 border-white">
+                <div class="text-center">
+                    <div class="text-[10px] font-black text-momo-main tracking-[4px] opacity-60">MOMO TIMER</div>
+                </div>
                 
-                <div class="pt-6 pb-3 text-center relative">
-                    <div class="text-[12px] font-nunito font-black tracking-[3.5px] text-momo-main/80 uppercase">Momo Timer</div>
-                    <div class="flex justify-center items-center gap-1.5 mt-2.5 opacity-60">
-                        <div class="w-10 h-[1.5px] bg-gradient-to-r from-transparent to-momo-main"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-momo-main"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-momo-main"></div>
-                        <div class="w-10 h-[1.5px] bg-gradient-to-l from-transparent to-momo-main"></div>
+                <div class="w-full h-28 rounded-2xl border-2 border-dashed border-momo-main/30 bg-momo-bg flex items-center justify-center">
+                    <span class="text-2xl">📷</span>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-momo-lace">
+                    <div class="text-[42px] font-nunito font-black text-momo-main">25:00</div>
+                    <div class="w-full h-1.5 bg-momo-bg rounded-full mt-4 overflow-hidden">
+                        <div class="w-1/3 h-full bg-momo-main"></div>
                     </div>
                 </div>
 
-                <div class="px-5 pb-6 flex flex-col gap-3 relative z-10">
-                    <div class="w-full h-[100px] rounded-[18px] border-[2px] border-dashed border-momo-main/40 bg-white/60 flex flex-col items-center justify-center gap-1 shadow-sm transition-all">
-                        <div class="text-[22px]">📷</div>
-                        <div class="text-[11px] font-black text-momo-main tracking-wide">＋ 사진 추가</div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white/50 p-3 rounded-xl border border-white text-center">
+                        <div class="text-[8px] font-bold text-momo-dark">알람(분)</div>
+                        <div class="font-black text-momo-text">25</div>
                     </div>
-
-                    <div class="bg-white/80 border-2 border-white rounded-[20px] py-4 text-center relative overflow-hidden shadow-[0_8px_20px_rgba(248,153,179,0.08)]">
-                        <div class="text-[9px] font-nunito font-black tracking-[2.5px] text-momo-main/70 uppercase mb-1">total time</div>
-                        <div class="text-[46px] font-nunito font-black text-momo-main leading-none drop-shadow-sm">25:00</div>
-                        <div class="mt-4 mx-4 h-1.5 bg-momo-main/15 rounded-full overflow-hidden">
-                            <div class="w-[40%] h-full bg-gradient-to-r from-white to-momo-main rounded-full"></div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2.5 mt-1">
-                        <div class="flex-1 bg-white/80 rounded-[14px] py-2 text-center border-2 border-white shadow-sm">
-                            <div class="text-[9px] font-black text-momo-main/70 mb-0.5">알람 (분)</div>
-                            <div class="text-[13px] font-black text-momo-text">25</div>
-                        </div>
-                        <div class="flex-[1.5] bg-white/80 rounded-[14px] py-2 text-center border-2 border-white shadow-sm">
-                            <div class="text-[9px] font-black text-momo-main/70 mb-0.5">집중 앱</div>
-                            <div class="text-[13px] font-black text-momo-text">Photoshop 🎨</div>
-                        </div>
-                    </div>
-
-                    <div class="text-center text-[11px] font-bold text-momo-dark mt-2 bg-white/50 py-1.5 rounded-full border border-white">
-                        ♡ Photoshop 집중 중  ·  🔔 정시알람 ON
-                    </div>
-
-                    <div class="flex justify-center gap-3 my-2">
-                        <div class="w-[22px] h-[22px] rounded-full bg-[#F899B3] border-[2.5px] border-white shadow-md transform scale-110"></div>
-                        <div class="w-[22px] h-[22px] rounded-full bg-[#E97891] border-[2.5px] border-white shadow-sm opacity-60"></div>
-                        <div class="w-[22px] h-[22px] rounded-full bg-[#B9A4DD] border-[2.5px] border-white shadow-sm opacity-60"></div>
-                        <div class="w-[22px] h-[22px] rounded-full bg-[#7FCFAE] border-[2.5px] border-white shadow-sm opacity-60"></div>
-                    </div>
-
-                    <div class="flex gap-2.5 mt-1">
-                        <div class="flex-[2] bg-gradient-to-br from-[#FFB6C1] to-momo-main text-white py-3 rounded-[14px] text-center font-nunito font-black text-[12px] tracking-widest shadow-lg shadow-momo-main/30">START</div>
-                        <div class="flex-1 bg-white/90 text-momo-text py-3 rounded-[14px] text-center font-nunito font-black text-[11px] border-[1.5px] border-white shadow-sm">RESET</div>
+                    <div class="bg-white/50 p-3 rounded-xl border border-white text-center">
+                        <div class="text-[8px] font-bold text-momo-dark">집중 앱</div>
+                        <div class="font-black text-momo-text text-[10px]">Chrome 🎨</div>
                     </div>
                 </div>
 
-                <div class="flex justify-center items-center pb-4 pt-1 gap-[0px]">
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-momo-main/20 -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-momo-main/20 -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-momo-main/20 -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-momo-main/20 -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-momo-main/20 -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full border-[1.5px] border-momo-main/30 bg-transparent -ml-[1px]"></div>
-                </div>
+                <button class="w-full bg-momo-main text-white py-4 rounded-xl font-black text-sm shadow-md">START</button>
             </div>
             
-            <div class="absolute -top-6 -right-6 w-32 h-32 bg-[#FDE8EE] rounded-full blur-3xl -z-10"></div>
-            <div class="absolute -bottom-8 -left-8 w-40 h-40 bg-[#E2F0F9] rounded-full blur-3xl -z-10"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-momo-main/20 blur-3xl -z-10"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-200/50 blur-3xl -z-10"></div>
         </div>
     </main>
 
-    <footer class="text-center py-8 text-sm font-bold text-momo-main/60 relative z-10">
+    <footer class="text-center py-12 text-sm font-bold text-momo-main/40">
         <p>© 2026 Momo Timer. All rights reserved.</p>
-        <p class="mt-1.5 font-nunito tracking-wider text-momo-main/80">Make your time lovely 🎀</p>
     </footer>
 
 </body>
